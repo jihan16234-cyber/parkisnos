@@ -1,6 +1,6 @@
 # Parkinson's Detection from Hand-drawn Spiral & Wave
 
-A machine learning project that looks at a hand-drawn **spiral** or **wave** image and estimates whether it shows signs of Parkinson's disease (healthy vs. parkinson).
+A machine learning project that looks at a hand-drawn **spiral** or **wave** image and estimates whether it shows signs of Parkinson's disease (healthy vs. parkinson). It includes a Streamlit web app to try it out.
 
 > Educational demo only. It is not a medical diagnosis tool.
 
@@ -17,36 +17,53 @@ Course: _add course code_ | Instructor: _add professor name_
 
 ---
 
-## Update 1 (20 October 2026)
-- Project setup, image preprocessing and feature extraction (`common.py`), dataset description and project plan.
+## How it works
+1. **Preprocess:** grayscale, resize (spiral 128x128, wave 256x128), then black-and-white (Otsu threshold) so the pen stroke is white on black.
+2. **Features:** HOG (shape / tremor pattern) plus simple stroke statistics (ink amount, stroke length, number of contours, spread).
+3. **Models:** SVM (RBF), Logistic Regression, Random Forest, Gradient Boosting, trained separately for spiral and wave.
+4. **Evaluation:** 5-fold cross-validation, test accuracy, F1, AUC, and **subject-wise** accuracy (images from the same person are never split between train and test). The best model is chosen by cross-validation, not by the test set.
+5. **App:** upload an image, take a camera photo, or pick a dataset sample, and see the Parkinson's risk percentage.
 
-## Update 2
-- Dataset added (`data.zip`) and `train.py` to train and compare 4 models (SVM, Logistic Regression, Random Forest, Gradient Boosting). Results saved in `outputs/`.
+## Project files
 
-## Update 3
+| File | Purpose | Added in |
+|------|---------|----------|
+| `common.py` | Image preprocessing and feature extraction | Update 1 |
+| `data_description.md` | Dataset description | Update 1 |
+| `train.py` | Trains and evaluates the models, saves results in `outputs/` | Update 2 |
+| `data.zip` | Spiral and wave drawing images | Update 2 |
+| `app.py` | Streamlit web app | Update 3 |
+| `requirements.txt` | Python packages needed | Update 1-3 |
+| `project_plan.md` | Plan and status by update | Update 1-Final |
 
-**Date:** _add date_
-
-### What is included in Update 3
-- `app.py`: a Streamlit web app with two tabs.
-  - **Prediction:** choose spiral or wave, then upload an image, take a camera photo, or pick a sample from the dataset. The app shows the original image, the processed image, and the Parkinson's risk percentage.
-  - **Project Results:** model comparison table, sample images, and confusion matrices from `outputs/`.
-- If no saved model is found, the app trains the best model automatically on first start (takes 1-2 minutes).
-
-### Who added which file
-
-| Member | File(s) added in Update 3 | What it is |
-|--------|---------------------------|------------|
-| Nazmul Hasan Jihan | `README.md`, `requirements.txt` | Updated overview and package list (adds Streamlit) |
-| _Member 2 name_ | `app.py` | The Streamlit web app |
-| _Member 3 name_ | `project_plan.md` | Updated project plan |
-| _Member 4 name_ | `screenshots/` | Screenshots of the running app (spiral and wave prediction, results tab) |
-
-### How to run
+## How to run
 ```
 pip install -r requirements.txt
+python train.py
 python -m streamlit run app.py
 ```
 
-### Next steps (Final)
-- Add the final results, limitations and conclusion to the README.
+## Results
+_Paste the table from `outputs/results.csv` here, and add the `comparison.png` and confusion matrix images._
+
+| Dataset | Model | CV acc | Test acc | F1 | AUC | Subject-wise acc |
+|---------|-------|--------|----------|----|-----|------------------|
+| _spiral_ | _model_ | _value_ | _value_ | _value_ | _value_ | _value_ |
+| _wave_ | _model_ | _value_ | _value_ | _value_ | _value_ | _value_ |
+
+## Limitations
+- The dataset is small, so results can change a lot with a different split.
+- Drawings are taken on paper and photographed, so lighting and pen type can affect the result.
+- This is a screening-style demo and cannot replace a doctor's diagnosis.
+
+## Team contributions
+
+| Member | Contribution |
+|--------|--------------|
+| Nazmul Hasan Jihan | _what you did_ |
+| _Member 2 name_ | _what they did_ |
+| _Member 3 name_ | _what they did_ |
+| _Member 4 name_ | _what they did_ |
+
+## Conclusion
+_Write 2-3 lines about what worked best and what you would improve next._
